@@ -29,7 +29,7 @@ function artisan() {
 
     cd $artisan_path
     eval $artisan_cmd $*
-    cd -
+    cd - > /dev/null
 
     local artisan_exit_status=$? # Store the exit status so we can return it later
 
