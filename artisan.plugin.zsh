@@ -17,12 +17,19 @@ function artisan() {
     local laravel_path=`dirname $artisan_path`
     local artisan_cmd
 
-    
-    artisan_cmd="php $artisan_path"
 
+    # Allow adding a prefix for valet and multiple PHP versions
+    if [ -n "$ARTISAN_PREFIX" ]; then
+        artisan_cmd="$ARTISAN_PREFIX php artisan"
+    else
+        artisan_cmd="php artisan"
+    fi
+    
     local artisan_start_time=`date +%s`
 
+    cd $artisan_path
     eval $artisan_cmd $*
+    cd -
 
     local artisan_exit_status=$? # Store the exit status so we can return it later
 
@@ -47,7 +54,7 @@ function _artisan_find() {
     local dir=.
     until [ $dir -ef / ]; do
         if [ -f "$dir/artisan" ]; then
-            echo "$dir/artisan"
+            echo "$dir/"
             return 0
         fi
 
